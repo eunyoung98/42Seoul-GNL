@@ -58,7 +58,7 @@ static int	ft_backup(char **backup, char *buf, ssize_t rd_size)
 		return (0);
 }
 
-int			get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static char	*backup[OPEN_MAX];
 	ssize_t		rd_size;
@@ -66,10 +66,12 @@ int			get_next_line(int fd, char **line)
 
 	if (fd < 0 || fd >= OPEN_MAX || !line || BUFFER_SIZE <= 0)
 		return (-1);
-	while ((rd_size = read(fd, buf, BUFFER_SIZE)) >= 0)
+	rd_size = read(fd, buf, BUFFER_SIZE);
+	while (rd_size >= 0)
 	{
 		if (ft_backup(&backup[fd], buf, rd_size) || rd_size == 0)
 			break ;
+		rd_size = read(fd, buf, BUFFER_SIZE);
 	}
 	if (rd_size < 0)
 		return (-1);
